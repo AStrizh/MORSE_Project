@@ -8,9 +8,16 @@ import ReadStats
 def main():
     fileinput = input("Input filename: ")
 
+    print()
+    print()
+    print("Task One: ")
     timeinput = input("Input a time: ")
     print(ReadTrades.record_at_time(fileinput, timeinput))
 
+
+    print("------------------------------")
+    print()
+    print("Task Two: ")
     timeinput1 = input("Input a start time: ")
     timeinput2 = input("Input an end time: ")
 
