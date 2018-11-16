@@ -15,6 +15,14 @@ class TestStringMethods(unittest.TestCase):
             trades = ReadTrades.read_record("path/to/open")
             self.assertEqual(float(trades[0].price), 20.18, "The price does not match")
 
+    def test_CanIgnoreNone(self):
+        with patch("builtins.open", mock_open(read_data="2017-03-01T13:37:89Z 21.37 100")):
+            trades = ReadTrades.read_record("path/to/open")
+            self.assertFalse(trades)
+
+    def test_CanCatchBadDate(self):
+        self.assertRaises(ValueError, ReadTrades.process_trade("2017-03-01T13:37:89Z 21.37 100"))
+
     def test_CanCreateTrade(self):
         trade = ReadTrades.process_trade("2017-04-25T17:11:55Z 20.18 55")
         self.assertEqual(trade.time, datetime.datetime.strptime("2017-04-25T17:11:55", "%Y-%m-%dT%H:%M:%S"),

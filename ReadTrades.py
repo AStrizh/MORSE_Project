@@ -1,9 +1,6 @@
 import Trade
 import datetime
 
-import os.path
-from os import path
-
 
 # Todo: Catch date format exception
 # TODO: Create and test price at time function
@@ -20,7 +17,10 @@ def read_record(filename):
     try:
         with open(filename) as infile:
             for line in infile:
-                trades.append(process_trade(line))
+                trade = process_trade(line)
+                if trade is not None:
+                    trades.append(trade)
+
     except FileNotFoundError:
         print("File not found")
         return
@@ -30,7 +30,13 @@ def read_record(filename):
 
 def process_trade(record):
     tradeline = record.split("Z")
-    time = datetime.datetime.strptime(tradeline[0], "%Y-%m-%dT%H:%M:%S")
+
+    try:
+        time = datetime.datetime.strptime(tradeline[0], "%Y-%m-%dT%H:%M:%S")
+    except ValueError:
+        print("Cannot format Date/Time from " + record)
+        return
+
     trades = tradeline[1].strip().split(" ")
     trade = Trade.Trade(time, trades[0], trades[1])
     return trade
