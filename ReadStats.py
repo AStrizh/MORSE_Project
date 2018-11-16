@@ -16,15 +16,20 @@ class ReadStats:
         self._median = 0.0
         self._trades = []
 
-    def read_record(self, filename):
+    def read_stat_record(self, filename, timestart, timeend):
 
         try:
             with open(filename) as infile:
                 for line in infile:
                     trade = ReadTrades.process_trade(line)
                     if trade is not None:
-                        self.calc_stats(trade)
-                        self.insert_trade(trade)
+                        if trade.time < timestart:
+                            continue
+                        elif trade.time >= timeend:
+                            return
+                        else:
+                            self.calc_stats(trade)
+                            self.insert_trade(trade)
 
         except FileNotFoundError:
             print("File not found")
