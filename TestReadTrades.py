@@ -11,6 +11,12 @@ class TestStringMethods(unittest.TestCase):
         self.assertRaises(FileNotFoundError, ReadTrades.read_record("fakefile.txt"))
 
     def test_CanReadFile(self):
-        with patch("builtins.open", mock_open(read_data="data")) as mock_file:
-            assert ReadTrades.read_record("path/to/open") == "data"
+        with patch("builtins.open", mock_open(read_data="2017-04-25T17:11:55Z 20.18 55")):
+            assert ReadTrades.read_record("path/to/open") == "2017-04-25T17:11:55Z 20.18 55"
 
+    def test_CanCreateTrade(self):
+        trade = ReadTrades.process_trade("2017-04-25T17:11:55Z 20.18 55")
+        self.assertEqual(trade.time, datetime.datetime.strptime("2017-04-25T17:11:55", "%Y-%m-%dT%H:%M:%S"),
+                         "The date does not match")
+        self.assertEqual(float(trade.price), 20.18, "The price does not match")
+        self.assertEqual(int(trade.quantity), 55, "The quantity does not match")
