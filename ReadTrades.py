@@ -5,8 +5,7 @@ import os.path
 from os import path
 
 
-# TODO: Create and test file reading
-# TODO: Create and test Trade creation
+# Todo: Catch date format exception
 # TODO: Create and test price at time function
 # TODO: Create and test range function
 # TODO: Test max price
@@ -16,13 +15,17 @@ from os import path
 # TODO: Test median price
 
 def read_record(filename):
+    trades = []
 
-        try:
-            with open(filename) as infile:
-                for line in infile:
-                    return line
-        except FileNotFoundError:
-            print("File not found")
+    try:
+        with open(filename) as infile:
+            for line in infile:
+                trades.append(process_trade(line))
+    except FileNotFoundError:
+        print("File not found")
+        return
+
+    return trades
 
 
 def process_trade(record):

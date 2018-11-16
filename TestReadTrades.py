@@ -12,7 +12,8 @@ class TestStringMethods(unittest.TestCase):
 
     def test_CanReadFile(self):
         with patch("builtins.open", mock_open(read_data="2017-04-25T17:11:55Z 20.18 55")):
-            assert ReadTrades.read_record("path/to/open") == "2017-04-25T17:11:55Z 20.18 55"
+            trades = ReadTrades.read_record("path/to/open")
+            self.assertEqual(float(trades[0].price), 20.18, "The price does not match")
 
     def test_CanCreateTrade(self):
         trade = ReadTrades.process_trade("2017-04-25T17:11:55Z 20.18 55")
