@@ -5,7 +5,7 @@ import datetime
 import ReadTrades
 
 
-class TestStringMethods(unittest.TestCase):
+class TestReadTrades(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
