@@ -68,3 +68,29 @@ class TestReadStats(unittest.TestCase):
             rs = ReadStats.ReadStats()
             for trade in rs.read_record(self.fakefile):
                 print(trade.price, end=" ")
+
+    def test_CalcMedianEven(self):
+        with patch("builtins.open", mock_open(read_data=self.fakefile)):
+            rs = ReadStats.ReadStats()
+            rs.read_record(self.fakefile)
+            self.assertEqual( float(rs.get_median()), 17.21)
+
+    def test_CalcMedianOdd(self):
+        fakeeven = "2017-04-25T17:11:55Z 20.18 55\n" + \
+                  "2017-05-19T05:49:34Z 23.09 20\n"
+
+        with patch("builtins.open", mock_open(read_data=fakeeven)):
+            rs = ReadStats.ReadStats()
+            rs.read_record(self.fakefile)
+            self.assertEqual(float(rs.get_median()), 20.18)
+
+    def test_CalcMedianSmaller(self):
+        fakeeventhis = "2017-03-01T13:37:29Z 19.37 4\n" + \
+                  "2017-04-25T17:11:55Z 20.18 4\n" + \
+                  "2017-05-19T05:49:34Z 23.09 3\n" + \
+                  "2017-06-12T09:51:21Z 25.21 3"
+
+        with patch("builtins.open", mock_open(read_data=fakeeventhis)):
+            rs = ReadStats.ReadStats()
+            rs.read_record(self.fakefile)
+            self.assertEqual( float(rs.get_median()), 21.63)

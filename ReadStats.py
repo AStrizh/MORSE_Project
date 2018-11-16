@@ -43,7 +43,6 @@ class ReadStats:
 
         self._trades.insert(i, newtrade)
 
-
     def calc_stats(self, trade):
         if float(trade.price) < self._min:
             self._min = float(trade.price)
@@ -73,4 +72,33 @@ class ReadStats:
         return math.sqrt(variance)
 
     def get_median(self):
-        return self._median
+
+        if self._totalshares % 2 == 0:
+            middle = self._totalshares / 2
+
+            total = 0
+            i = 0
+            for trade in self._trades:
+                total += int(trade.quantity)
+                if total > middle + 1:
+                    return trade.price
+
+                elif total == middle or total == middle + 1:
+
+                    return round((float(self._trades[i].price) +
+                                  float(self._trades[i + 1].price)) / 2, 2)
+
+                else:
+                    i += 1
+
+            return 0
+
+        else:
+            middle = self._totalshares / 2 + 1
+            total = 0
+            for trade in self._trades:
+                total += int(trade.quantity)
+                if total >= middle:
+                    return trade.price
+
+            return 0
