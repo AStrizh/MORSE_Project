@@ -1,6 +1,3 @@
-import datetime
-
-
 class Trade:
 
     def __init__(self, time, price, quantity):
