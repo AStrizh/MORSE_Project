@@ -37,3 +37,9 @@ class TestReadStats(unittest.TestCase):
             rs = ReadStats.ReadStats()
             rs.read_record(self.fakefile)
             self.assertEqual(rs.get_max(), 23.09)
+
+    def testCalcAverage(self):
+        with patch("builtins.open", mock_open(read_data=self.fakefile)):
+            rs = ReadStats.ReadStats()
+            rs.read_record(self.fakefile)
+            self.assertEqual(rs.get_average(), 17.21)

@@ -9,8 +9,8 @@ class ReadStats:
         self._min = float("inf")
         self._max = 0.0
         self._average = 0.0
-        self._total = 0
-        self._sum = 0.0
+        self._totalshares = 0
+        self._sumprices = 0.0
         self._div = 0.0
         self._median = 0.0
 
@@ -38,6 +38,9 @@ class ReadStats:
         if float(trade.price) > self._max:
             self._max = float(trade.price)
 
+        self._totalshares += int(trade.quantity)
+        self._sumprices += (float(trade.price) * int(trade.quantity))
+
     def get_min(self):
         return self._min
 
@@ -45,7 +48,7 @@ class ReadStats:
         return self._max
 
     def get_average(self):
-        return self._average
+        return round(self._sumprices / self._totalshares, 2)
 
     def get_div(self):
         return self._div
