@@ -2,8 +2,6 @@ import Trade
 import datetime
 
 
-# Todo: Catch date format exception
-# TODO: Create and test price at time function
 # TODO: Create and test range function
 # TODO: Test max price
 # TODO: Test min price
@@ -26,6 +24,45 @@ def read_record(filename):
         return
 
     return trades
+
+
+def record_at_time(filename, timevar):
+    timevar = timevar.strip().replace('Z', '')
+    lasttrade = None
+
+    try:
+        time = datetime.datetime.strptime(timevar, "%Y-%m-%dT%H:%M:%S")
+
+    except ValueError:
+        print("Cannot format Date/Time from " + timevar)
+        return
+
+    try:
+        with open(filename) as infile:
+
+            for line in infile:
+                trade = process_trade(line)
+                if trade is not None:
+
+                    if trade.time == time:
+                        return trade.price
+                    elif trade.time < time:
+                        lasttrade = trade
+                    else:
+                        if lasttrade is None:
+                            return trade.price
+
+                        tempprice = (float(trade.price) * float(trade.quantity)
+                                     + float(lasttrade.price) * float(lasttrade.quantity)) \
+                                    / (float(trade.quantity) + float(lasttrade.quantity))
+
+                        return round(tempprice, 2)
+
+    except FileNotFoundError:
+        print("File not found")
+        return
+
+    return lasttrade.price
 
 
 def process_trade(record):
