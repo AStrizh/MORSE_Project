@@ -1,5 +1,6 @@
 import Trade
 import datetime
+import math
 import ReadTrades
 
 
@@ -13,9 +14,9 @@ class ReadStats:
         self._sumprices = 0.0
         self._div = 0.0
         self._median = 0.0
+        self._trades = []
 
     def read_record(self, filename):
-        trades = []
 
         try:
             with open(filename) as infile:
@@ -23,13 +24,25 @@ class ReadStats:
                     trade = ReadTrades.process_trade(line)
                     if trade is not None:
                         self.calc_stats(trade)
-                        trades.append(trade)
+                        self.insert_trade(trade)
 
         except FileNotFoundError:
             print("File not found")
             return
 
-        return trades
+        return self._trades
+
+    def insert_trade(self, newtrade):
+
+        i = 0
+        for trade in self._trades:
+            if float(newtrade.price) > float(trade.price):
+                i += 1
+            else:
+                break
+
+        self._trades.insert(i, newtrade)
+
 
     def calc_stats(self, trade):
         if float(trade.price) < self._min:
@@ -51,7 +64,13 @@ class ReadStats:
         return round(self._sumprices / self._totalshares, 2)
 
     def get_div(self):
-        return self._div
+        average = round(self._sumprices / self._totalshares, 2)
+        divsum = 0.0
+        for trade in self._trades:
+            divsum += int(trade.quantity) * ((float(trade.price) - average) ** 2)
+
+        variance = divsum / self._totalshares
+        return math.sqrt(variance)
 
     def get_median(self):
         return self._median
