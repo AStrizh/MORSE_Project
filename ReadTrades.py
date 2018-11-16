@@ -23,3 +23,11 @@ def read_record(filename):
                     return line
         except FileNotFoundError:
             print("File not found")
+
+
+def process_trade(record):
+    tradeline = record.split("Z")
+    time = datetime.datetime.strptime(tradeline[0], "%Y-%m-%dT%H:%M:%S")
+    trades = tradeline[1].strip().split(" ")
+    trade = Trade.Trade(time, trades[0], trades[1])
+    return trade
