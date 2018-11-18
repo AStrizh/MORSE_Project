@@ -14,19 +14,6 @@ class TestReadTrades(unittest.TestCase):
                        "2017-05-19T05:49:34Z 23.09 21\n" + \
                        "2017-06-12T09:51:21Z 17.21 80000"
 
-    def test_CanThrowReadException(self):
-        self.assertRaises(FileNotFoundError, ReadTrades.read_record("fakefile.txt"))
-
-    def test_CanReadFile(self):
-        with patch("builtins.open", mock_open(read_data="2017-04-25T17:11:55Z 20.18 55")):
-            trades = ReadTrades.read_record("path/to/open")
-            self.assertEqual(float(trades[0].price), 20.18, "The price does not match")
-
-    def test_CanIgnoreNone(self):
-        with patch("builtins.open", mock_open(read_data="2017-03-01T13:37:89Z 21.37 100")):
-            trades = ReadTrades.read_record("path/to/open")
-            self.assertFalse(trades)
-
     def test_CanCatchBadDate(self):
         self.assertRaises(ValueError, ReadTrades.process_trade("2017-03-01T13:37:89Z 21.37 100"))
 

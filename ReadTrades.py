@@ -1,32 +1,18 @@
 import Trade
 import datetime
 
-
-# TODO: Create and test range function
-# TODO: Test max price
-# TODO: Test min price
-# TODO: Test average price
-# TODO: Test standard deviation price
-# TODO: Test median price
-
-def read_record(filename):
-    trades = []
-
-    try:
-        with open(filename) as infile:
-            for line in infile:
-                trade = process_trade(line)
-                if trade is not None:
-                    trades.append(trade)
-
-    except FileNotFoundError:
-        print("File not found")
-        return
-
-    return trades
+"""Functionality for reading Trade data from a provided file name"""
 
 
 def record_at_time(filename, timevar):
+    """ Reads a file of Trades and returns the trade at provided time
+
+        Keyword Arguments:
+        filename - Name of the file to read
+        timevar - The datetime.datetime to search for
+        If there is no trade for that time the file returns adjacent trade data.
+    """
+
     timevar = timevar.strip().replace('Z', '')
     lasttrade = None
 
@@ -44,6 +30,10 @@ def record_at_time(filename, timevar):
                 trade = process_trade(line)
                 if trade is not None:
 
+                    # Addresses the various possibilities of trade times such as:
+                    # Trade exists for provided time
+                    # The first trade time (and so all others) are past the given date
+                    # Given time is between two trades and their average is returned
                     if trade.time == time:
                         return trade.price
                     elif trade.time < time:
@@ -62,10 +52,20 @@ def record_at_time(filename, timevar):
         print("File not found")
         return
 
+    # If file finishes parsing and all dates are before requested date, returns last trade price on file
     return lasttrade.price
 
 
 def process_trade(record):
+    """ Returns a Trade object from a string of trade data (only accepts UTC 'Z' region code or none)
+
+        Returns None if bad date data
+
+        Keyword Arguments:
+        record -  A string in the format 2017-04-25T17:11:55Z 20.18 55
+    """
+
+    # Takes out the zulu region code
     tradeline = record.split("Z")
 
     try:
