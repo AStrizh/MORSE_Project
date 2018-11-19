@@ -8,12 +8,12 @@ Ready to review
    The project was built with PyCharm on Windows  
    There should be no issues importing into PyCharm  
    
-   When launched Main UI will ask for a file name and a series of dates as per instructions  
+   When launched Main UI will prompt user for interaction  
    
 
 ## Files
    
-   Main - Launched the program  
+   Main - Launches the program  
    ReadTrades - Used for first task, returns trade at time with record_at_time() method   
    ReadStats - Used for second task, calculates statistics  with the read_stat_record() method  
    Trade - Object to contain a trade object  
@@ -30,14 +30,14 @@ In its current state it will only process dates and times that either end with "
 
 It is assumed that trades are in chronological order  
 
-It it is assumed that some date/time stamps are fault and that those trades should be ignored  
+It it is assumed that some date/time stamps are faulty and that those trades should be ignored  
 
 
 ## Build Tools
 
 - Python 3.7
 - PyCharm
----
+
 
 ## Author
 
