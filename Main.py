@@ -38,11 +38,11 @@ def main():
     rs = ReadStats.ReadStats()
     rs.read_stat_record(fileinput, time1, time2)
 
-    print("Max price was: " + str(rs.get_max()))
-    print("Min price was: " + str(rs.get_min()))
-    print("Average price was: " + str(rs.get_average()))
-    print("Standard Deviation: " + str(rs.get_div()))
-    print("Median Price: " + str(rs.get_median()))
+    print("Max price was: ", rs.get_max())
+    print("Min price was: ", rs.get_min())
+    print("Average price was: ", rs.get_average())
+    print("Standard Deviation: ", rs.get_div())
+    print("Median Price: ", rs.get_median())
 
 
 main()

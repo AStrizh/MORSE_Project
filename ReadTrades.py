@@ -42,9 +42,12 @@ def record_at_time(filename, timevar):
                         if lasttrade is None:
                             return trade.price
 
-                        tempprice = (float(trade.price) * float(trade.quantity)
-                                     + float(lasttrade.price) * float(lasttrade.quantity)) \
-                                    / (float(trade.quantity) + float(lasttrade.quantity))
+                        # tempprice = (float(trade.price) * float(trade.quantity)
+                        #              + float(lasttrade.price) * float(lasttrade.quantity)) \
+                        #             / (float(trade.quantity) + float(lasttrade.quantity))
+                        tempprice = (trade.price * trade.quantity
+                                     + lasttrade.price * lasttrade.quantity) \
+                                    / (trade.quantity + lasttrade.quantity)
 
                         return round(tempprice, 2)
 
@@ -75,5 +78,5 @@ def process_trade(record):
         return
 
     trades = tradeline[1].strip().split(" ")
-    trade = Trade.Trade(time, trades[0], trades[1])
+    trade = Trade.Trade(time, float(trades[0]), int(trades[1]))
     return trade

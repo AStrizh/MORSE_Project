@@ -2,7 +2,6 @@ import unittest
 from unittest.mock import patch, mock_open
 import Trade
 import datetime
-import ReadTrades
 import ReadStats
 
 
@@ -67,11 +66,11 @@ class TestReadStats(unittest.TestCase):
             rs.read_stat_record(self.fakefile, self.fakestart, self.fakeend)
             self.assertTrue(2.091 > rs.get_div() > 2.0909)
 
-    # def test_TradesInOrder(self):
-    #     with patch("builtins.open", mock_open(read_data=self.fakefile)):
-    #         rs = ReadStats.ReadStats()
-    #         for trade in rs.read_stat_record(self.fakefile, self.fakestart, self.fakeend):
-    #             print(trade.price, end=" ")
+    def test_TradesInOrder(self):
+        with patch("builtins.open", mock_open(read_data=self.fakefile)):
+            rs = ReadStats.ReadStats()
+            for trade in rs.read_stat_record(self.fakefile, self.fakestart, self.fakeend):
+                print(trade.price, end=" ")
 
     def test_CalcMedianEven(self):
         with patch("builtins.open", mock_open(read_data=self.fakefile)):

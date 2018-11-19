@@ -47,7 +47,7 @@ class ReadStats:
         """
         i = 0
         for trade in self._trades:
-            if float(newtrade.price) > float(trade.price):
+            if newtrade.price > trade.price:
                 i += 1
             else:
                 break
@@ -63,14 +63,14 @@ class ReadStats:
             Adds to total sum of costs of shares
         """
 
-        if float(trade.price) < self._min:
-            self._min = float(trade.price)
+        if trade.price < self._min:
+            self._min = trade.price
 
-        if float(trade.price) > self._max:
-            self._max = float(trade.price)
+        if trade.price > self._max:
+            self._max = trade.price
 
-        self._totalshares += int(trade.quantity)
-        self._sumprices += (float(trade.price) * int(trade.quantity))
+        self._totalshares += trade.quantity
+        self._sumprices += (trade.price * trade.quantity)
 
     # Getters for the data requested in instructions
     def get_min(self):
@@ -90,7 +90,7 @@ class ReadStats:
 
         # Iterates through all trades to compute squared differences
         for trade in self._trades:
-            divsum += int(trade.quantity) * ((float(trade.price) - average) ** 2)
+            divsum += trade.quantity * ((trade.price - average) ** 2)
 
         variance = divsum / self._totalshares
         return math.sqrt(variance)
@@ -110,14 +110,14 @@ class ReadStats:
             # If even and by last trade median has exceeded price is returned
             # If even and one of two middle values is reached, averages them
             for trade in self._trades:
-                total += int(trade.quantity)
+                total += trade.quantity
                 if total > middle + 1:
                     return trade.price
 
                 elif total == middle or total == middle + 1:
 
-                    return round((float(self._trades[i].price) +
-                                  float(self._trades[i + 1].price)) / 2, 2)
+                    return round((self._trades[i].price +
+                                  self._trades[i + 1].price) / 2, 2)
 
                 else:
                     i += 1
@@ -128,7 +128,7 @@ class ReadStats:
             middle = self._totalshares / 2 + 1
             total = 0
             for trade in self._trades:
-                total += int(trade.quantity)
+                total += trade.quantity
                 if total >= middle:
                     return trade.price
 
