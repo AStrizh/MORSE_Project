@@ -4,7 +4,7 @@ import datetime
 """Functionality for reading Trade data from a provided file name"""
 
 
-def record_at_time(filename, timevar):
+def record_at_time(filename, time):
     """ Reads a file of Trades and returns the trade at provided time
 
         Keyword Arguments:
@@ -13,15 +13,7 @@ def record_at_time(filename, timevar):
         If there is no trade for that time the file returns adjacent trade data.
     """
 
-    timevar = timevar.strip().replace('Z', '')
     lasttrade = None
-
-    try:
-        time = datetime.datetime.strptime(timevar, "%Y-%m-%dT%H:%M:%S")
-
-    except ValueError:
-        print("Cannot format Date/Time from " + timevar)
-        return
 
     try:
         with open(filename) as infile:
@@ -42,9 +34,6 @@ def record_at_time(filename, timevar):
                         if lasttrade is None:
                             return trade.price
 
-                        # tempprice = (float(trade.price) * float(trade.quantity)
-                        #              + float(lasttrade.price) * float(lasttrade.quantity)) \
-                        #             / (float(trade.quantity) + float(lasttrade.quantity))
                         tempprice = (trade.price * trade.quantity
                                      + lasttrade.price * lasttrade.quantity) \
                                     / (trade.quantity + lasttrade.quantity)
@@ -63,12 +52,13 @@ def process_trade(record):
     """ Returns a Trade object from a string of trade data (only accepts UTC 'Z' region code or none)
 
         Returns None if bad date data
+        Also prints bad date to console
 
         Keyword Arguments:
         record -  A string in the format 2017-04-25T17:11:55Z 20.18 55
     """
 
-    # Takes out the zulu region code
+    # Takes out the Zulu region code
     tradeline = record.split("Z")
 
     try:

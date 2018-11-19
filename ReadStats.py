@@ -1,10 +1,9 @@
-import Trade
-import datetime
 import math
 import ReadTrades
 
 
 class ReadStats:
+    """Functionality for getting statistics from a provided file name and Date/Time interval"""
 
     def __init__(self):
         self._min = float("inf")
@@ -107,7 +106,7 @@ class ReadStats:
             # Adds up total shares trades
             # If total is odd finds median
 
-            # If even and by last trade median has exceeded price is returned
+            # If even and median was exceeded price is returned
             # If even and one of two middle values is reached, averages them
             for trade in self._trades:
                 total += trade.quantity
